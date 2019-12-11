@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="_meta :: header">
+    <title>列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>微信文章抓取历史记录 <a class="btn btn-success radius r"
+                                                                                                                 style="line-height:1.6em;margin-top:3px"
+                                                                                                                 href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <form action="#" th:action="@{/admin/wechatOldrecords}" method="post">
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <fieldset class="layui-elem-field">
+                <legend>微信文章抓取历史</legend>
+                <div class="layui-field-box">
+
+                    <hr style="margin: 0">
+                    <div class="cl pd-5 bg-1 bk-gray">
+						<span class="l">
+						<a href="javascript:;"
+                           onclick="deleteAll('/admin/wechatOldrecords/deleteAll')"
+                           class="layui-btn  layui-btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+						</span>
+                        <span class="r wei-height">共有数据：<strong th:text="${pageInfo.total}"></strong> 条</span>
+                    </div>
+                    <hr>
+
+
+
+                    <table class="layui-table text-c">
+                        <thead>
+                        <tr class="text-c">
+                            <th width="25"><input type="checkbox" name="" value=""/></th>
+                            <th width="25">序号</th>
+                            <th width="40">关键字</th>
+                            <th width="40">创建时间</th>
+                            <th width="40">抓取状态</th>
+                            <th width="100">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-c" th:if="${pageInfo.list.size() == 0}">
+                            <td colspan="15"><strong>暂无数据</strong></td>
+                        </tr>
+                        <tr class="text-c" th:each="wechatOldrecords,count:${pageInfo.list}">
+                            <td><input type="checkbox" value="1" th:value="${wechatOldrecords.id}"
+                                       name="id"/></td>
+                            <td th:text="${count.count}"></td>
+                            <td th:text="${wechatOldrecords.keyword}"></td>
+                            <td th:text="${#temporals.format(wechatOldrecords.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${wechatOldrecords.status==1 ? '标题' : '标题和文章'}"></td>
+                            <td class="td-manage">
+                                <a title="导出word" href="javascript:;"
+                                   th:href="@{/wechat/download/} + ${wechatOldrecords.id}"
+                                   class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe640;</i></a>
+                                <a title="删除" href="javascript:;"
+                                   th:onclick="'javascript:deleteById(\'/admin/'+'wechatOldrecords'+'/delete/'+${wechatOldrecords.id}+'\')'"
+                                   class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+        <div th:include="_pagination :: page"></div>
+    </form>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<div th:replace="_footer :: footerjs">
+</div>
+<!--/_footer 作为公共模版分离出去-->
+<script>
+    //日期时间范围选择
+    laydate.render({
+
+    });
+    lay('.timeSpace').each(function(){
+        laydate.render({
+            elem: this
+            ,type: 'datetime'
+            ,range: true //或 range: '~' 来自定义分割字符
+        });
+    });
+    function ExportWord(id) {
+        var s ={
+            "id":id
+        }
+        $(function () {
+            $.ajax({
+                data:s,
+                type: 'POST',
+                url: "/wechat/ExportWord",
+                success: function (data) {
+                    try {
+                        window.open("/fileSuffix/"+data+"_知乎.doc","","");
+                    }
+                    catch (e) {
+                        layer.designMsg('下载文件失败!', 5);
+                    }
+                    layer.designMsg('下载成功！',1);
+                },
+                error: function () {
+                    layer.designMsg('导出异常!', 5);
+                }
+            });
+        })
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_meta :: header">
+    <title>编辑</title>
+</head>
+<body>
+<article class="page-container">
+
+    <input type="hidden" name="id" id="id "th:value="${bdRecords.id}"/>
+    <div class="row cl">
+        <label class="form-label col-xs-2 col-sm-2"><span
+                class="c-red">*</span>文件路径：</label>
+        <div class="formControls col-xs-10 col-sm-10">
+            <input type="input-text" class="input-text" id="path"  name="filepath"  placeholder="请填写文件路径"/>
+        </div>
+    </div>
+    </div>
+    <div class="row cl">
+        <div class="col-xs-3 col-sm-3 col-xs-offset-4 col-sm-offset-3">
+            <input th:onclick="'javascript:ExportWord('+ ${bdRecords.id} + ')'"  class="btn btn-primary radius" id="subbtn" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;"/>
+            <input class="btn radius" id="reset" type="reset" value="&nbsp;&nbsp;重置&nbsp;&nbsp;"/>
+        </div>
+    </div>
+</article>
+<!--_footer 作为公共模版分离出去-->
+<div th:replace="_footer :: footerjs"></div>
+<div th:replace="_ueditor :: ueditor"></div>
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+
+
+    lay('.timeSpace').each(function(){
+        laydate.render({
+            elem: this
+            ,trigger: 'click'
+            ,type: 'datetime'
+        });
+    });
+    function ExportWord(id) {
+        var path = $('#path').val();
+        var s ={
+            "id":id,
+            "path":path
+        }
+        $(function () {
+            $.ajax({
+                data:s,
+                type: 'POST',
+                url: "/zhihu/ExportWord",
+                success: function (data) {
+                    console.log("==========]" + data);
+                    layer.designMsg('导出成功！',1);
+                },
+                error: function () {
+                    layer.designMsg('导出异常!', 5);
+                }
+            });
+        })
+    }
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

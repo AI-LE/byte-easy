@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="_meta :: header">
+    <title>详情</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="page-container">
+
+        <div class="cl pd-5 bg-1 bk-gray ">
+            <div class="searchByField">
+                <input type="input-text" class="input-text"  id="keyword" name="keyword" placeholder="导出文件的关键词" sid="keyword"/>
+
+                <button type="button" onclick="ExportWord()"
+                        class="layui-btn  layui-btn-success radius"><i
+                        class="Hui-iconfont">&#xe640;</i> 导出word
+                </button>
+            </div>
+        </div>
+            <!--<div th:include="_pagination :: page"></div>-->
+
+        <div ><p id="app"></p></div>
+    <!--<div th:include="_pagination :: page"></div>-->
+</div>
+<!--_footer 作为公共模版分离出去-->
+<!--<div th:replace="_footer :: footerjs"></div>-->
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本--><!--_footer 作为公共模版分离出去-->
+<div th:replace="_footer :: footerjs"></div>
+<div th:replace="_ueditor :: ueditor"></div>
+<script>
+    // //日期时间范围选择
+    // laydate.render({
+    //
+    // });
+    lay('.timeSpace').each(function(){
+        laydate.render({
+            elem: this
+            ,type: 'datetime'
+            ,range: true //或 range: '~' 来自定义分割字符
+        });
+    });
+
+    /**
+     * 这个是百度知道爬取按钮
+     */
+        function search() {
+            $(function () {
+                    var keyword = $('#keyword').val();
+                    var s ={
+                        "keyword":keyword
+                    }
+                    $.ajax({
+                        data:s,
+                        type: 'POST',
+                        url: "/zhidaotest/test",
+                        success: function (data) {
+                            console.log("==========]" + data);
+                            alert("=="+ data)
+                            alldata(data);
+
+                            // if (data.code == "0") {
+                            //     console.log(data.data);
+                            //     layer.designMsg('编辑成功!', 1, function () {
+                            //         var index = parent.layer.getFrameIndex(window.name);
+                            //         parent.location.reload();
+                            //         parent.layer.close(index);
+                            //     });
+                            // } else {
+                            //     layer.designMsg('编辑失败!');
+                            // }
+                        },
+                        error: function () {
+                            layer.designMsg('导出异常!', 5);
+                        }
+                    });
+            })
+        }
+
+    /**
+     * 这个是导出
+     */
+    function ExportWord() {
+        var keyword = $('#keyword').val();
+        var s ={
+            "keyword":keyword
+        }
+       alert("keyword"+keyword);
+        $(function () {
+            $.ajax({
+                data:s,
+                type: 'POST',
+                url: "/zhidaotest/ExportWord",
+                success: function (data) {
+                    console.log("==========]" + data);
+                    alert("=="+ data)
+                    alldata(data);
+                    layer.designMsg('导出成功！',1);
+                    // if (data.code == "0") {
+                    //     console.log(data.data);
+                    //     layer.designMsg('编辑成功!', 1, function () {
+                    //         var index = parent.layer.getFrameIndex(window.name);
+                    //         parent.location.reload();
+                    //         parent.layer.close(index);
+                    //     });
+                    // } else {
+                    //     layer.designMsg('编辑失败!');
+                    // }
+                },
+                error: function () {
+                    layer.designMsg('编辑异常!', 5);
+                }
+            });
+        })
+    }
+        function  alldata(data) {
+            for (var i = 0; i < data.length; i++) {
+                $('#app').append(data[i]);
+            }
+
+        }
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

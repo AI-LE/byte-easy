@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="_meta :: header">
+    <title>列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>微博抓取历史记录<a class="btn btn-success radius r"
+                                                style="line-height:1.6em;margin-top:3px"
+                                                href="javascript:location.replace(location.href);" title="刷新"><i
+                class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <form action="#" th:action="@{/admin/tBloggerOld}" method="post">
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <fieldset class="layui-elem-field">
+                <legend>微博抓取历史记录</legend>
+                <div class="layui-field-box">
+
+                    <hr style="margin: 0">
+                    <div class="cl pd-5 bg-1 bk-gray">
+						<span class="l">
+						<a href="javascript:;"
+                           onclick="deleteAll('/admin/tBloggerOld/deleteAll')"
+                           class="layui-btn  layui-btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+						<!--<a href="javascript:;"-->
+                           <!--onclick="layer_show('添加','/admin/tBloggerOld/addBefore',900,500)"-->
+                           <!--class="layui-btn  layui-btn-normal radius"><i class="Hui-iconfont">&#xe600;</i> 添加</a>-->
+						</span>
+                        <!--<span class="r wei-height">共有数据：<strong th:text="${pageInfo.total}"></strong> 条</span>-->
+                    </div>
+                    <hr>
+
+                    <!--<div class="cl pd-5 bg-1 bk-gray ">-->
+                        <!--<div class="searchByField">-->
+                                         <!--<input type="input-text" class="input-text" th:value="${searchInfo.bloggername}" name="bloggername" placeholder="搜索博主名字" sid="bloggername"/>-->
+                                         <!--&lt;!&ndash;<input type="input-text" class="input-text" th:value="${searchInfo.uid}" name="uid" placeholder="搜索博主的uid" sid="uid"/>&ndash;&gt;-->
+                                         <!--&lt;!&ndash;<input type="input-text" class="input-text" th:value="${searchInfo.containerid}" name="containerid" placeholder="搜索博主的containerid" sid="containerid"/>&ndash;&gt;-->
+                                         <!--&lt;!&ndash;<input type="input-text" placeholder="搜索创建时间" name="createtimeSpace" th:value="${createtimeSpace}" class="input-text  timeSpace"/>&ndash;&gt;-->
+                                         <!--&lt;!&ndash;<input type="input-text" class="input-text" th:value="${searchInfo.wordmax}" name="wordmax" placeholder="搜索最大字数" sid="wordmax"/>&ndash;&gt;-->
+                                         <!--&lt;!&ndash;<input type="input-text" class="input-text" th:value="${searchInfo.wordmin}" name="wordmin" placeholder="搜索最小字数" sid="wordmin"/>&ndash;&gt;-->
+                                         <!--&lt;!&ndash;<input type="input-text" placeholder="搜索抓取时间节点" name="timestartSpace" th:value="${timestartSpace}" class="input-text  timeSpace"/>&ndash;&gt;-->
+                                         <!--&lt;!&ndash;<input type="input-text" placeholder="搜索抓取时间尾节点" name="timeendSpace" th:value="${timeendSpace}" class="input-text  timeSpace"/>&ndash;&gt;-->
+                                         <!--&lt;!&ndash;<input type="input-text" class="input-text" th:value="${searchInfo.username}" name="username" placeholder="搜索用户名" sid="username"/>&ndash;&gt;-->
+                                         <!--&lt;!&ndash;<input type="input-text" class="input-text" th:value="${searchInfo.commitchioce}" name="commitchioce" placeholder="搜索0等于no 1等于yes" sid="commitchioce"/>&ndash;&gt;-->
+                                         <!--&lt;!&ndash;<input type="input-text" class="input-text" th:value="${searchInfo.pointersum}" name="pointersum" placeholder="搜索点赞数" sid="pointersum"/>&ndash;&gt;-->
+                                         <!--&lt;!&ndash;<input type="input-text" class="input-text" th:value="${searchInfo.judge}" name="judge" placeholder="搜索0等于纯文字 1等于文字加图片" sid="judge"/>&ndash;&gt;-->
+                            <!--<button type="submit"-->
+                                    <!--class="layui-btn  layui-btn-success radius"><i-->
+                                        <!--class="Hui-iconfont">&#xe665;</i> 搜索-->
+                            <!--</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <table class="layui-table text-c">
+                        <thead>
+                        <tr class="text-c">
+                            <th width="25"><input type="checkbox" name="" value=""/></th>
+                            <th width="25">序号</th>
+                                <th width="40">博主名字</th>
+                                <th width="40">uid</th>
+
+                                 <!--<th width="40">结束时间</th>-->
+                                <th width="40">创建时间</th>
+                            <th width="80">抓取时间阶段</th>
+                            <th width="70">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-c" th:if="${pageInfo.list.size() == 0}">
+
+                            <td colspan="15">  <span style="cursor:pointer;"class="label label-success radius"><strong>暂无数据</strong></span></td>
+                        </tr>
+                        <tr class="text-c" th:each="tBloggerOld,count:${pageInfo.list}">
+                            <td><input type="checkbox" value="1" th:value="${tBloggerOld.id}"
+                                       name="id"/></td>
+                            <td th:text="${count.count}"></td>
+                                    <td th:text="${tBloggerOld.bloggername}"></td>
+                                    <td th:text="${tBloggerOld.uid}"></td>
+
+                                       <!--<td th:text="${tBloggerOld.timeend}"></td>-->
+                                      <td th:text="${#temporals.format(tBloggerOld.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${tBloggerOld.timeduring}"></td>
+                            <td class="td-manage">
+                                <a title="导出word" href="javascript:;"
+                                   th:onclick="'javascript:ExportWord('+ ${tBloggerOld.id} + ')'"
+                                   class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe640;</i></a>
+                                <a title="删除" href="javascript:;"
+                                   th:onclick="'javascript:deleteById(\'/admin/'+'tBloggerOld'+'/delete/'+${tBloggerOld.id}+'\')'"
+                                   class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+        <!--<div th:include="_pagination :: page"></div>-->
+    </form>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<div th:replace="_footer :: footerjs">
+</div>
+<!--/_footer 作为公共模版分离出去-->
+<script>
+    //日期时间范围选择
+    laydate.render({
+
+    });
+    lay('.timeSpace').each(function(){
+        laydate.render({
+            elem: this
+            ,type: 'datetime'
+            ,range: true //或 range: '~' 来自定义分割字符
+        });
+    });
+
+
+    /**
+     * 这个是导出
+     */
+    function ExportWord(id) {
+        var s ={
+            "id":id
+        }
+        layer.confirm('确认要导出吗？',function(){
+            $.ajax({
+                data:s,
+                type: 'POST',
+                url: "/weibo/ExportWord",
+                success: function (data) {
+                    try {
+                        window.open("/fileSuffix/"+data+"_微博.doc","","");
+                    }
+                    catch (e) {
+                        layer.designMsg('导出文件失败!', 5);
+                    }
+                    layer.designMsg('导出成功！',1);
+                },
+                error: function () {
+                    layer.designMsg('导出异常!', 5);
+                }
+            });
+        })
+    }
+</script>
+</body>
+</html>

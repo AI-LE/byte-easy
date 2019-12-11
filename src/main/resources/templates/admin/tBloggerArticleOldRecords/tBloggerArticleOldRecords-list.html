@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="_meta :: header">
+    <title>微博文章抓取历史列表</title>
+</head>
+<script type="text/javascript" th:src="@{/progressBar/jquery.min.js}" src="progressBar/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/progressBar/css.css}" href="progressBar/css.css" />
+
+<body>
+<!--进度条-->
+<div class="wrapper" id="wrapper" style="display: none;">
+    <div class="load-bar" id="load-bar">
+        <div class="load-bar-inner" id="load-bar-inner" data-loading="0"> <span id="counter"></span> </div>
+    </div>
+    <h1 id="h11">请等待... </h1>
+</div>
+
+
+
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>微博文章抓取历史<a class="btn btn-success radius r"
+                                                                                                          style="line-height:1.6em;margin-top:3px"
+                                                                                                          href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <form action="#" th:action="@{/admin/tBloggerArticleOldRecords}" method="post">
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <fieldset class="layui-elem-field">
+                <legend>微博文章抓取历史</legend>
+                <div class="layui-field-box">
+
+                    <hr style="margin: 0">
+                    <div class="cl pd-5 bg-1 bk-gray">
+						<span class="l">
+						<a href="javascript:;"
+                           onclick="deleteAll('/admin/tBloggerArticleOldRecords/deleteAll')"
+                           class="layui-btn  layui-btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+						</span>
+                        <span class="r wei-height">共有数据：<strong th:text="${pageInfo.total}"></strong> 条</span>
+                    </div>
+                    <hr>
+
+
+                    <table class="layui-table text-c">
+                        <thead>
+                        <tr class="text-c">
+                            <th width="25"><input type="checkbox" name="" value=""/></th>
+                            <th width="25">序号</th>
+                            <th width="40">关键词</th>
+                            <th width="40">创建时间</th>
+                            <th width="100">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-c" th:if="${pageInfo.list.size() == 0}">
+                            <td colspan="15"><span class="label label-success radius" >暂无数据</span></td>
+                        </tr>
+                        <tr class="text-c" th:each="tBloggerArticleOldRecords,count:${pageInfo.list}">
+                            <td><input type="checkbox" value="1" th:value="${tBloggerArticleOldRecords.id}"
+                                       name="id"/></td>
+                            <td th:text="${count.count}"></td>
+                            <td ><span style="cursor:pointer;"class="label label-success radius"th:text="${tBloggerArticleOldRecords.keywords}" ></span></td>
+                            <td th:text="${#temporals.format(tBloggerArticleOldRecords.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td class="td-manage">
+                                <!--<a title="编辑" href="javascript:;"
+                                   th:onclick="'javascript:layer_show(\'编辑\',\'/admin/'+'tBloggerArticleOldRecords'+'/editBefore/'+${tBloggerArticleOldRecords.id}+'\',900,220)'"
+                                   class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>-->
+                                <a title="导出word" href="javascript:;"
+                                   th:onclick="'javascript:ExportWord('+ ${tBloggerArticleOldRecords.id} + ')'"
+                                   class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe640;</i></a>
+                                <a title="删除" href="javascript:;"
+                                   th:onclick="'javascript:deleteById(\'/admin/'+'tBloggerArticleOldRecords'+'/delete/'+${tBloggerArticleOldRecords.id}+'\')'"
+                                   class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="div1" style="	width: 0px;height: 18px;background-color: #C7C7C7;text-align: center;"></div>
+            </fieldset>
+
+        </div>
+        <div th:include="_pagination :: page"></div>
+    </form>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<div th:replace="_footer :: footerjs">
+</div>
+<!--/_footer 作为公共模版分离出去-->
+<script>
+
+    var flag = 0;
+    var current = 0;
+    var click = 0;
+
+    //日期时间范围选择
+    laydate.render({
+
+    });
+    lay('.timeSpace').each(function(){
+        laydate.render({
+            elem: this
+            ,type: 'datetime'
+            ,range: true //或 range: '~' 来自定义分割字符
+        });
+    });
+    function searchword(id) {
+
+        //防止重复点击
+        layer.confirm('确认要导出吗？',function(){
+            click = 1;
+            var bar = document.getElementById("wrapper");
+            bar.style.display = (bar.style.display.match("block")) ? "none" : "block";
+            setInterval(increment,1000);
+            //
+            setTimeout(function(){
+                layer.designMsg('程序正在执行',8 ,"",0.5);
+            },1000);
+            var s ={
+                "id":id
+            }
+            $.ajax({
+                data:s,
+                type: 'POST',
+                url: "/admin/tBloggerArticleOldRecords/exportWord",
+                success: function (data) {
+                    // location.replace(location.href);
+                    try {
+                        flag = 1;
+                            layer.designMsg('导出文件成功！', 1);
+                            // tid = setInterval("getCount()", 65);
+                            //window.open("/fileSuffix/" + data + "_百度.doc", "", "")
+                    }
+                    catch (e) {
+                        flag = 1;
+                        layer.designMsg('导出文件失败!', 5);
+                    }
+
+                },
+                error: function () {
+                    flag = 1;
+                    layer.designMsg('导出异常!', 5);
+                }
+            });
+        })
+    }
+    /**
+     * 这个是导出
+     */
+    function ExportWord(id) {
+        var s ={
+            "id":id
+        }
+        layer.confirm('确认要导出吗？',function(){
+            $.ajax({
+                data:s,
+                type: 'POST',
+                url: "/admin/tBloggerArticleOldRecords/OldExportWord",
+                success: function (data) {
+                    try {
+                        window.location.href="/admin/tBloggerArticleOldRecords/download/"+id;
+                    }
+                    catch (e) {
+                        layer.designMsg('下载文件失败!', 5);
+                    }
+                    layer.designMsg('下载成功！',1);
+                },
+                error: function () {
+                    layer.designMsg('下载异常!', 5);
+                }
+            });
+        })
+    }
+    increment
+    <!--进度条-->
+    var div = document.getElementById("load-bar-inner");
+    function increment(){
+        var width = $('#load-bar').css('width');
+        if(current < 100 &&  click == 1){
+            //setInterval(increment,100);
+            $("#h11").text('请等待...');
+            // $("#p11").text('请等待...');
+            $('#counter').html(current + '%');
+            $('#counter').css('left',parseInt(width) * current /100 - 25);
+            div.style.width = current + '%';
+            current++;
+            if (flag == 1){
+                $('#counter').html('100%');
+                $("#h11").text('导出成功！');
+                $("#p11").text('');
+                div.style.width = '100%';
+                flag = 2;
+                //current = 100;
+                if( flag == 2){
+                    $("#wrapper").fadeOut(1800);
+                    current = 0;
+                    flag = 0;
+                    click = 0;
+                }
+            }
+        }else if (flag == 1){
+            $('#counter').html('100%');
+            $("#h11").text('导出成功！');
+            $("#p11").text('');
+            div.style.width = '100%';
+            flag = 2;
+        }
+
+        if( flag == 2){
+            $("#wrapper").fadeOut(1800);
+            current = 0;
+            flag = 0;
+            click = 0;
+        }
+    }
+</script>
+</body>
+</html>

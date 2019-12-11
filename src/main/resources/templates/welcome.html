@@ -1,0 +1,774 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EASY-BYTE</title>
+    <meta name="description" content="easy byte">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="apple-mobile-web-app-title" content="" />
+    <script data-n-head="true" th:src="@{/font/js/jquery.min.js}" src="js/jquery.min.js"></script>
+    <script data-n-head="true" th:src="@{/font/js/echarts.js}" ></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/font/css/amazeui.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/font/css/app.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/welcome.css}" href="static/css/welcome.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/h-ui/css/layui.css}" href="static/h-ui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/h-ui.admin/css/H-ui.admin.css}" href="static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/h-ui.admin/skin/blue/skin.css}" href="static/h-ui.admin/skin/blue/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" th:href="@{/h-ui.admin/css/style.css}" href="static/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/h-ui/css/H-ui.min.css}" href="static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fSelect.css}" href="static/css/fSelect.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/search.css}" href="static/css/search.css" />
+    <link rel="stylesheet"  type="text/css" th:href="@{/css/bootstrap.min.css}" href="static/css/bootstrap.min.css"/>
+    <script src = "https://echarts.baidu.com/dist/echarts.min.js" ></script>
+</head>
+<style>
+    .ibox-title{
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+    .wrapper-content{
+        padding: 20px;
+    }
+    .topcon{
+        /*border: 5px solid #aaaaaa;*/
+        overflow: hidden;
+        padding: 10px;
+        color: #fff;
+        background: #fff;
+    }
+    .count{
+        background-image: linear-gradient(45deg, #ff9700 , #ed1c24);
+    }
+    .count-2{
+        background-image: linear-gradient(45deg , #EE3B3B , #EE799F);
+    }
+    .count-3{
+        background-image: linear-gradient(45deg  , #3CB371 , #7CCD7C);
+    }
+    .count-4{
+        background-image: linear-gradient(45deg, #5CACEE , #87CEFA );
+    }
+    .count-5{
+        background-image: linear-gradient(45deg , #FF69B4 , #EE799F);
+    }
+    .count-6{
+        background-image: linear-gradient(45deg , #87CEFA , #87CEFA);
+    }
+    .count-7{
+        background-image: linear-gradient(45deg , #B0C4DE , #87CEFA);
+    }
+    .count-8{
+        background-image: linear-gradient(45deg , #ADD8E6 , #87CEFA);
+    }
+    .count-9{
+        background-image: linear-gradient(45deg  , #008000 , #3CB371);
+    }
+    .topcon h2,.topcon h5{
+        padding: 0;
+    }
+    .topcon h5{
+        color: #f5f5f5;
+    }
+    .topcon>div{
+        padding: 20px 0;
+        margin-right: 5px;
+        margin-left: 5px;
+        width: calc(33.1% - 7px);
+    }
+    .topcon>div:last-child{
+        margin-right: 0;
+    }
+    .topcon .left{
+        padding-right: 0;
+    }
+    .topcon .right{
+        text-align: right;
+
+    }
+    .char>div{
+        width: calc(50% - 10px);
+    }
+    .char>div:first-child{
+        margin-right: 20px;
+    }
+</style>
+<body class="gray-bg" style="background-color: #eeeeee;" onload="sum()">
+<div class="wrapper wrapper-content" >
+    <div class="topcon">
+        <div class="col-sm-3 count">
+            <div class="col-sm-4 left">
+                <img src="../h-ui.admin/images/pachong.png" alt="" style="width: 50px;height: 50px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="sumZhua"></h2>
+                <h5>总抓取数量</h5>
+            </div>
+        </div>
+        <div class="col-sm-3 count-2" onclick="baiduZhua()" style="cursor: pointer;">
+            <div class="col-sm-4 left">
+                <img src="../images/baidu.png" alt="" style="width: 50px;height: 50px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="baiduSum" >0</h2>
+                <h5 >百度知道抓取数量</h5>
+            </div>
+        </div>
+        <div class="col-sm-3 count-5" onclick="baiduKeywordZhua()" style="cursor: pointer;">
+            <div class="col-sm-4 left">
+                <img src="../images/baidu.png" alt="" style="width: 50px;height: 50px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="baiduKeywordSum" >0</h2>
+                <h5 >百度关键字抓取数量</h5>
+            </div>
+        </div>
+        <div class="col-sm-3 count-3"  onclick="zhihuZhua()" style="cursor: pointer;">
+            <div class="col-sm-4 left">
+                <img src="../images/zhihu.png" alt="" style="width: 45px;height: 45px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="zhihuSum">0</h2>
+                <h5>知乎抓取数量</h5>
+            </div>
+        </div>
+        <div class="col-sm-3 count-4" onclick="weiboZhua()"style="cursor: pointer;" >
+            <div class="col-sm-4 left">
+                <img src="../images/weibo.png" alt="" style="width: 50px;height: 50px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="weiboSum">0</h2>
+                <h5>微博抓取数量</h5>
+            </div>
+        </div>
+        <div class="col-sm-3 count-6" onclick="weiboKeywordZhua()"style="cursor: pointer;" >
+            <div class="col-sm-4 left">
+                <img src="../images/weibo.png" alt="" style="width: 50px;height: 50px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="weiboKeywordSum">0</h2>
+                <h5>微博关键字抓取数量</h5>
+            </div>
+        </div>
+        <div class="col-sm-3 count-7" onclick="weiboMessageZhua()"style="cursor: pointer;" >
+            <div class="col-sm-4 left">
+                <img src="../images/weibo.png" alt="" style="width: 50px;height: 50px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="weiboMessageSum">0</h2>
+                <h5>微博文章抓取数量</h5>
+            </div>
+        </div>
+        <div class="col-sm-3 count-8" onclick="weiboQuestionZhua()"style="cursor: pointer;" >
+            <div class="col-sm-4 left">
+                <img src="../images/weibo.png" alt="" style="width: 50px;height: 50px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="weiboQuestionSum">0</h2>
+                <h5>微博问答抓取数量</h5>
+            </div>
+        </div>
+        <div class="col-sm-3 count-9"  onclick="wechatZhua()" style="cursor: pointer;">
+            <div class="col-sm-4 left">
+                <img src="../images/wechat.png" alt="" style="width: 45px;height: 45px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="wechatSum">0</h2>
+                <h5>微信抓取数量</h5>
+            </div>
+        </div>
+    </div>
+    <div style="height: 30px;"></div>
+    <div class="char">
+        <div class="col-sm-6" style="background-color: #fff;">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content" style="width: 95%;">
+                    <h3 style="text-align: center">最近七天抓取变化</h3>
+                    <div id="box-1" class="flot-chart" style="height: 280px;padding-top: 20px;padding-left: 20px;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6"  style="background-color: #fff;">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content" style="width: 100%;">
+                    <h3 style="text-align: center">最近七天抓取</h3>
+                    <div id="box-2" class="flot-chart" style="height: 280px;padding-top: 20px;padding-left: 20px;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="clear:both"></div>
+</div>
+</body>
+<script>
+    function sum(){
+        $.ajax({
+            url:"/admin/recordsSum/selectSum",
+            type:"post",
+            dataType:"json",
+            success:function(data){
+                $("#sumZhua").text(data.data.sum);
+                $("#baiduSum").text(data.data.selectBaidu);
+                $("#zhihuSum").text(data.data.selectZhihu);
+                $("#weiboSum").text(data.data.selectWeibo);
+                $("#weiboKeywordSum").text(data.data.selectWeiboKeyword);
+                $("#weiboMessageSum").text(data.data.selectWeiboMessage);
+                $("#weiboQuestionSum").text(data.data.selectWeiboQusetion);
+                $("#baiduKeywordSum").text(data.data.selectBaiduKeyword);
+                $("#wechatSum").text(data.data.selectWechat);
+                console.log(data+"=========");
+
+                var result = [];
+                var resulta = [];
+                var resulta1 = [];
+                var resulta2 = [];
+                var resulta3 = [];
+                var resulta4 = [];
+                var resulta5 = [];
+                var resulta6 = [];
+                var resulta7 = [];
+
+                result[0] = data.data.sevenday;
+                result[1] = data.data.sixday;
+                result[2] = data.data.fiveday;
+                result[3] = data.data.fourday;
+                result[4] = data.data.threeday;
+                result[5] = data.data.twoday;
+                result[6] = data.data.nowday;
+
+                //百度
+                if (typeof(data.data.seven1) != "undefined"){
+                    resulta[0] = data.data.seven1;
+                }else{
+                    resulta[0] = 0;
+                }
+                if (typeof(data.data.six1) != "undefined"){
+                    resulta[1] = data.data.six1;
+                }else{
+                    resulta[1] = 0;
+                }
+                if (typeof(data.data.five1) != "undefined"){
+                    resulta[2] = data.data.five1;
+                }else{
+                    resulta[2] = 0;
+                }
+                if (typeof(data.data.four1) != "undefined"){
+                    resulta[3] = data.data.four1;
+                }else{
+                    resulta[3] = 0;
+                }
+                if (typeof(data.data.three1) != "undefined"){
+                    resulta[4] = data.data.three1;
+                }else{
+                    resulta[4] = 0;
+                }
+                if (typeof(data.data.two1) != "undefined"){
+                    resulta[5] = data.data.two1;
+                }else{
+                    resulta[5] = 0;
+                }
+                if (typeof(data.data.now1) != "undefined"){
+                    resulta[6] = data.data.now1;
+                }else{
+                    resulta[6] = 0;
+                }
+
+                //知乎
+                if (typeof(data.data.seven2) != "undefined"){
+                    resulta1[0] = data.data.seven2;
+                }else{
+                    resulta1[0] = 0;
+                }
+                if (typeof(data.data.six2) != "undefined"){
+                    resulta1[1] = data.data.six2;
+                }else{
+                    resulta1[1] = 0;
+                }
+                if (typeof(data.data.five2) != "undefined"){
+                    resulta1[2] = data.data.five2;
+                }else{
+                    resulta1[2] = 0;
+                }
+                if (typeof(data.data.four2) != "undefined"){
+                    resulta1[3] = data.data.four2;
+                }else{
+                    resulta1[3] = 0;
+                }
+                if (typeof(data.data.three2) != "undefined"){
+                    resulta1[4] = data.data.three2;
+                }else{
+                    resulta1[4] = 0;
+                }
+                if (typeof(data.data.two2) != "undefined"){
+                    resulta1[5] = data.data.two2;
+                }else{
+                    resulta1[5] = 0;
+                }
+                if (typeof(data.data.now2) != "undefined"){
+                    resulta1[6] = data.data.now2;
+                }else {
+                    resulta1[6] = 0;
+                }
+
+                //微博
+                if (typeof(data.data.seven3) != "undefined"){
+                    resulta2[0] = data.data.seven3;
+                }else{
+                    resulta2[0] = 0;
+                }
+                if (typeof(data.data.six3) != "undefined"){
+                    resulta2[1] = data.data.six3;
+                }else{
+                    resulta2[1] = 0;
+                }
+                if (typeof(data.data.five3) != "undefined"){
+                    resulta2[2] = data.data.five3;
+                }else{
+                    resulta2[2] = 0;
+                }
+                if (typeof(data.data.four3) != "undefined"){
+                    resulta2[3] = data.data.four3;
+                }else{
+                    resulta2[3] = 0;
+                }
+                if (typeof(data.data.three3) != "undefined"){
+                    resulta2[4] = data.data.three3;
+                }else{
+                    resulta2[4] = 0;
+                }
+                if (typeof(data.data.two3) != "undefined"){
+                    resulta2[5] = data.data.two3;
+                }else{
+                    resulta2[5] = 0;
+                }
+                if (typeof(data.data.now3) != "undefined"){
+                    resulta2[6] = data.data.now3;
+                }else{
+                    resulta2[6] = 0;
+                }
+                //微博关键字
+                if (typeof(data.data.seven4) != "undefined"){
+                    resulta3[0] = data.data.seven4;
+                }else{
+                    resulta3[0] = 0;
+                }
+                if (typeof(data.data.six4) != "undefined"){
+                    resulta3[1] = data.data.six4;
+                }else{
+                    resulta3[1] = 0;
+                }
+                if (typeof(data.data.five4) != "undefined"){
+                    resulta3[2] = data.data.five4;
+                }else{
+                    resulta3[2] = 0;
+                }
+                if (typeof(data.data.four4) != "undefined"){
+                    resulta3[3] = data.data.four4;
+                }else{
+                    resulta3[3] = 0;
+                }
+                if (typeof(data.data.three4) != "undefined"){
+                    resulta3[4] = data.data.three4;
+                }else{
+                    resulta3[4] = 0;
+                }
+                if (typeof(data.data.two4) != "undefined"){
+                    resulta3[5] = data.data.two4;
+                }else{
+                    resulta3[5] = 0;
+                }
+                if (typeof(data.data.now4) != "undefined"){
+                    resulta3[6] = data.data.now4;
+                }else{
+                    resulta3[6] = 0;
+                }
+                //微博文章
+                if (typeof(data.data.seven5) != "undefined"){
+                    resulta4[0] = data.data.seven5;
+                }else{
+                    resulta4[0] = 0;
+                }
+                if (typeof(data.data.six5) != "undefined"){
+                    resulta4[1] = data.data.six5;
+                }else{
+                    resulta4[1] = 0;
+                }
+                if (typeof(data.data.five5) != "undefined"){
+                    resulta4[2] = data.data.five5;
+                }else{
+                    resulta4[2] = 0;
+                }
+                if (typeof(data.data.four5) != "undefined"){
+                    resulta4[3] = data.data.four5;
+                }else{
+                    resulta4[3] = 0;
+                }
+                if (typeof(data.data.three5) != "undefined"){
+                    resulta4[4] = data.data.three5;
+                }else{
+                    resulta4[4] = 0;
+                }
+                if (typeof(data.data.two5) != "undefined"){
+                    resulta4[5] = data.data.two5;
+                }else{
+                    resulta4[5] = 0;
+                }
+                if (typeof(data.data.now5) != "undefined"){
+                    resulta4[6] = data.data.now5;
+                }else{
+                    resulta4[6] = 0;
+                }
+                //微博问答
+                if (typeof(data.data.seven6) != "undefined"){
+                    resulta5[0] = data.data.seven6;
+                }else{
+                    resulta5[0] = 0;
+                }
+                if (typeof(data.data.six6) != "undefined"){
+                    resulta5[1] = data.data.six6;
+                }else{
+                    resulta5[1] = 0;
+                }
+                if (typeof(data.data.five6) != "undefined"){
+                    resulta5[2] = data.data.five6;
+                }else{
+                    resulta5[2] = 0;
+                }
+                if (typeof(data.data.four6) != "undefined"){
+                    resulta5[3] = data.data.four6;
+                }else{
+                    resulta5[3] = 0;
+                }
+                if (typeof(data.data.three6) != "undefined"){
+                    resulta5[4] = data.data.three6;
+                }else{
+                    resulta5[4] = 0;
+                }
+                if (typeof(data.data.two6) != "undefined"){
+                    resulta5[5] = data.data.two6;
+                }else{
+                    resulta5[5] = 0;
+                }
+                if (typeof(data.data.now6) != "undefined"){
+                    resulta5[6] = data.data.now6;
+                }else{
+                    resulta5[6] = 0;
+                }
+                //百度关键字
+                if (typeof(data.data.seven7) != "undefined"){
+                    resulta6[0] = data.data.seven7;
+                }else{
+                    resulta6[0] = 0;
+                }
+                if (typeof(data.data.six7) != "undefined"){
+                    resulta6[1] = data.data.six7;
+                }else{
+                    resulta6[1] = 0;
+                }
+                if (typeof(data.data.five7) != "undefined"){
+                    resulta6[2] = data.data.five7;
+                }else{
+                    resulta6[2] = 0;
+                }
+                if (typeof(data.data.four7) != "undefined"){
+                    resulta6[3] = data.data.four7;
+                }else{
+                    resulta6[3] = 0;
+                }
+                if (typeof(data.data.three7) != "undefined"){
+                    resulta6[4] = data.data.three7;
+                }else{
+                    resulta6[4] = 0;
+                }
+                if (typeof(data.data.two7) != "undefined"){
+                    resulta6[5] = data.data.two7;
+                }else{
+                    resulta6[5] = 0;
+                }
+                if (typeof(data.data.now7) != "undefined"){
+                    resulta6[6] = data.data.now7;
+                }else{
+                    resulta6[6] = 0;
+                }
+                //微信
+                if (typeof(data.data.seven8) != "undefined"){
+                    resulta7[0] = data.data.seven8;
+                }else{
+                    resulta7[0] = 0;
+                }
+                if (typeof(data.data.six8) != "undefined"){
+                    resulta7[1] = data.data.six8;
+                }else{
+                    resulta7[1] = 0;
+                }
+                if (typeof(data.data.five8) != "undefined"){
+                    resulta7[2] = data.data.five8;
+                }else{
+                    resulta7[2] = 0;
+                }
+                if (typeof(data.data.four8) != "undefined"){
+                    resulta7[3] = data.data.four8;
+                }else{
+                    resulta7[3] = 0;
+                }
+                if (typeof(data.data.three8) != "undefined"){
+                    resulta7[4] = data.data.three8;
+                }else{
+                    resulta7[4] = 0;
+                }
+                if (typeof(data.data.two8) != "undefined"){
+                    resulta7[5] = data.data.two8;
+                }else{
+                    resulta7[5] = 0;
+                }
+                if (typeof(data.data.now8) != "undefined"){
+                    resulta7[6] = data.data.now8;
+                }else{
+                    resulta7[6] = 0;
+                }
+                brokenline(result,resulta,resulta1,resulta2,resulta3,resulta4,resulta5,resulta6,resulta7);
+
+                var resultb = [];
+                resultb[0] = data.data.weekBaidu;
+                resultb[1] = data.data.weekZhihu;
+                resultb[2] = data.data.weekWeibo;
+                resultb[3] = data.data.weekWeiboKeyword;
+                resultb[4] = data.data.weekWeiboMeaasge;
+                resultb[5] = data.data.weekWeiboQuestion;
+                resultb[6] = data.data.weekBaiduKeyword;
+                resultb[7] = data.data.weekWechat;
+                columnar(resultb);
+
+            }
+        })
+    }
+    //折线图
+    function brokenline(times,brokenlineData,brokenlineData1,brokenlineData2,brokenlineData3,brokenlineData4,brokenlineData5,brokenlineData6,brokenlineData7) {
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('box-1'));
+        // 指定图表的配置项和数据
+        option = {
+            color:['#EE799F','#71C671','#A4D3EE','#87CEFA','#B0C4DE','#ADD8E6','#FF69B4','#008000'],
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['百度知道', '知乎', '微博','微博关键字','微博文章','微博问答','百度关键字','微信'],
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: times,
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '百度知道',
+                    type: 'line',
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color:'#EE799F'
+                            }
+                        }
+                    },
+                    data: brokenlineData,
+                },
+                {
+                    name: '知乎',
+                    type: 'line',
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color:'#71C671'
+                            }
+                        }
+                    },
+                    data: brokenlineData1,
+                },
+                {
+                    name: '微博',
+                    type: 'line',
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color:'#A4D3EE'
+                            }
+                        }
+                    },
+                    data: brokenlineData2,
+                },
+                {
+                    name: '微博关键字',
+                    type: 'line',
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color:'#87CEFA'
+                            }
+                        }
+                    },
+                    data: brokenlineData3,
+                },
+                {
+                    name: '微博文章',
+                    type: 'line',
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color:'#B0C4DE'
+                            }
+                        }
+                    },
+                    data: brokenlineData4,
+                },
+                {
+                    name: '微博问答',
+                    type: 'line',
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color:'#ADD8E6'
+                            }
+                        }
+                    },
+                    data: brokenlineData5,
+                },
+                {
+                    name: '百度关键字',
+                    type: 'line',
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color:'#FF69B4'
+                            }
+                        }
+                    },
+                    data: brokenlineData6,
+                },
+                {
+                    name: '微信',
+                    type: 'line',
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color:'#008000'
+                            }
+                        }
+                    },
+                    data: brokenlineData7,
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+        window.onresize = function () {
+            myChart.resize();
+        }
+    }
+
+    function columnar(columnarData) {
+        //柱状图
+        // 基于准备好的dom，初始化echarts实例
+        var myCharta = echarts.init(document.getElementById('box-2'));
+        // 指定图表的配置项和数据
+        optiona = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['百度知道', '知乎', '微博','微博关键字','微博文章','微博问答','百度关键字','微信']
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    axisLabel:{
+                        interval:0,  //类目全显
+                    },
+                    data: ['百度知道', '知乎', '微博','微博关键字','微博文章','微博问答','百度关键字','微信']
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name:['条数'],
+                    type: 'bar',
+                    barWidth: '50%',
+                    itemStyle:{
+                        color: function(params) {
+                            var colorList = [
+                                '#EE799F','#71C671',"#A4D3EE","#87CEFA","#B0C4DE","#ADD8E6","#FF69B4","#008000"
+                            ];
+                            return colorList[params.dataIndex]
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            // formatter: '{c}'
+                            formatter: '{b}\n{c}'
+                        }
+                    },
+                    barWidth:50,
+                    data: columnarData,
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myCharta.setOption(optiona);
+
+        window.onresize = function () {
+            myCharta.resize();
+        }
+    }
+
+</script>
+<script>
+    function baiduZhua(){
+        window.location.replace("/admin/bdRecords");
+    }
+    function zhihuZhua(){
+        window.location.replace("/admin/zhihuRecords");
+    }
+    function weiboZhua(){
+        window.location.replace("/admin/tBlogger");
+    }
+    function baiduKeywordZhua(){
+        window.location.replace("/admin/baidukeyword");
+    }
+    function weiboKeywordZhua() {
+        window.location.replace("/admin/sinaSerch");
+    }
+    function weiboQuestionZhua(){
+        window.location.replace("/admin/weiboqa");
+    }
+    function weiboMessageZhua(){
+        window.location.replace("/admin/tBloggerArticle");
+    }
+    function wechatZhua(){
+        window.location.replace("/admin/wechat");
+    }
+</script>
+
+</html>

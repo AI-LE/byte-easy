@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mbyte.easy.admin.mapper.KeywordIndexMapper">
+    <resultMap id="BaseResultMap" type="com.mbyte.easy.admin.entity.KeywordIndex">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <id column="data" jdbcType="VARCHAR" property="data" />
+        <id column="bdindex" jdbcType="INTEGER" property="bdindex" />
+        <id column="number" jdbcType="INTEGER" property="number" />
+    </resultMap>
+    <select id="selectTotalNumber" resultType="Integer">
+        select count(*)
+        FROM keyword_index
+        WHERE uuid = #{uuid}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select *
+        FROM keyword_index
+        WHERE uuid = #{downloadUUID}
+        ORDER BY bdindex DESC
+        limit #{page},50
+    </select>
+</mapper>

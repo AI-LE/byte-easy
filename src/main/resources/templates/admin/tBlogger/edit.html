@@ -1,0 +1,341 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_meta :: header">
+    <title>编辑</title>
+</head>
+<body>
+<article class="page-container">
+    <form class="form form-horizontal" id="form-tBlogger-edit" action="#"
+          th:action="@{/admin/tBlogger/edit}" th:object="${tBlogger}">
+        <input type="hidden" name="id" th:value="${tBlogger.id}"/>
+                <div class="row cl">
+                    <label class="form-label col-xs-2 col-sm-2"><span
+                                class="c-red">*</span>博主名字：</label>
+                            <div class="formControls col-xs-10 col-sm-10">
+                                <input type="input-text" class="input-text" th:value="${tBlogger.bloggername}" name="bloggername"  placeholder="修改博主名字" id="bloggername"/>
+                            </div>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-2 col-sm-2"><span
+                                class="c-red">*</span>博主uid：</label>
+                            <div class="formControls col-xs-10 col-sm-10">
+                                <input type="input-text" class="input-text" th:value="${tBlogger.uid}" name="uid"  placeholder="修改博主的uid" id="uid"/>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-xs-2 col-sm-2" style="margin-left: -13px;"><span class="c-red">*</span>选择类型：</label>
+                    <a style="margin-left: 32px; margin-top: 5px;height: 50px;position: absolute;">纯文字</a>
+                    <input type="checkbox" id="wordsinge" style="margin-top: 8px;margin-left: 77px;width: 15px;height: 15px;" onchange="typechoice()">
+                    <a style="margin-left: 38px; margin-top: 5px;height: 50px;position: absolute;">文字和图片</a>
+                    <input type="checkbox" id="wordsingephoto" style="margin-top: 8px;margin-left: 107px;width: 15px;height: 15px;" onchange="typechoiceno()">
+                </div>
+                <div class="row cl" style="display: none;">
+                    <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>0等于纯文字 1等于文字加图片：</label>
+                    <div class="formControls col-xs-10 col-sm-10">
+                        <input type="input-text" class="input-text"th:value="${tBlogger.judge}" name="judge" placeholder="请填写0等于纯文字 1等于文字加图片" id="judge"/>
+                    </div>
+                </div>
+                <!--<div class="row cl">-->
+                    <!--<label class="form-label col-xs-2 col-sm-2"><span-->
+                                <!--class="c-red">*</span>创建时间：</label>-->
+                            <!--<div class="formControls col-xs-10 col-sm-10">-->
+                                <!--<input type="input-text" class="input-text timeSpace" readonly="readonly" autocomplete="off" th:value="${#temporals.format(tBlogger.createtime, 'yyyy-MM-dd HH:mm:ss')}" name="createtime" placeholder="请选择创建时间"/>-->
+                            <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="row cl">
+                    <label class="form-label col-xs-2 col-sm-2"><span
+                                class="c-red">*</span>最小字数：</label>
+                            <div class="formControls col-xs-10 col-sm-10">
+                                <input type="input-text" class="input-text" th:value="${tBlogger.wordmax}" name="wordmax"  placeholder="请填写最小字数" id="wordmax"/>
+                            </div>
+                    </div>
+                </div>
+                <!--<div class="row cl">-->
+                    <!--<label class="form-label col-xs-2 col-sm-2"><span-->
+                                <!--class="c-red">*</span>最小字数：</label>-->
+                            <!--<div class="formControls col-xs-10 col-sm-10">-->
+                                <!--<input type="input-text" class="input-text" th:value="${tBlogger.wordmin}" name="wordmin"  placeholder="修改最小字数" id="wordmin"/>-->
+                            <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="row cl">
+                    <label class="form-label col-xs-2 col-sm-2"><span
+                                class="c-red">*</span>开始时间：</label>
+                            <div class="formControls col-xs-10 col-sm-10">
+                                <input type="input-text" class="input-text timeSpace" readonly="readonly" autocomplete="off" th:value="${#temporals.format(tBlogger.timestart, 'yyyy-MM-dd HH:mm:ss')}" name="timestart" placeholder="请选择抓取时间节点"/>
+                            </div>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-2 col-sm-2"><span
+                                class="c-red">*</span>结束时间：</label>
+                            <div class="formControls col-xs-10 col-sm-10">
+                                <input type="input-text" class="input-text timeSpace" readonly="readonly" autocomplete="off" th:value="${#temporals.format(tBlogger.timeend, 'yyyy-MM-dd HH:mm:ss')}" name="timeend" placeholder="请选择抓取时间尾节点"/>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>是否抓取评论:</label>
+                    <a style="margin-left: 43px;position: absolute;margin-top: 5px;">是</a><input style="margin-left: 65px;width: 15px;height: 15px;margin-top: 5px;"type="checkbox" id="commityes" onchange="commit()" >
+                    <a style="position: absolute;margin-left: 40px;margin-top: 5px;">否</a><input style="margin-left: 60px;width: 15px;height: 15px;margin-top: 5px;" type="checkbox" id="commitno" onchange="commitnop()">
+                </div>
+                <div class="row cl" style="display: none;" id = "point">
+                    <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>最小点赞数：</label>
+                    <div class="formControls col-xs-10 col-sm-10">
+                        <input type="input-text" class="input-text" th:value="${tBlogger.pointersum}"  name="pointersum" placeholder="请填写点赞数" id="pointersum" onchange="commitjuege()"/>
+                    </div>
+                </div>
+                <div class="row cl" style="display: none;">
+                    <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>0等于no 1等于yes：</label>
+                    <div class="formControls col-xs-10 col-sm-10">
+                        <input type="input-text" class="input-text" th:value="${tBlogger.commitchioce}" name="commitchioce" placeholder="请填写0等于no 1等于yes" id="commitchioce"/>
+                    </div>
+                </div>
+                <!--<div class="row cl">-->
+                    <!--<label class="form-label col-xs-2 col-sm-2"><span-->
+                                <!--class="c-red">*</span>用户名：</label>-->
+                            <!--<div class="formControls col-xs-10 col-sm-10">-->
+                                <!--<input type="input-text" class="input-text" th:value="${tBlogger.username}" name="username"  placeholder="修改用户名" id="username"/>-->
+                            <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="row cl">-->
+                    <!--<label class="form-label col-xs-2 col-sm-2"><span-->
+                                <!--class="c-red">*</span>0等于no 1等于yes：</label>-->
+                            <!--<div class="formControls col-xs-10 col-sm-10">-->
+                                <!--<input type="input-text" class="input-text" th:value="${tBlogger.commitchioce}" name="commitchioce"  placeholder="修改0等于no 1等于yes" id="commitchioce"/>-->
+                            <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="row cl">-->
+                    <!--<label class="form-label col-xs-2 col-sm-2"><span-->
+                                <!--class="c-red">*</span>最大点赞数：</label>-->
+                            <!--<div class="formControls col-xs-10 col-sm-10">-->
+                                <!--<input type="input-text" class="input-text" th:value="${tBlogger.pointersum}" name="pointersum"  placeholder="修改点赞数" id="pointersum"/>-->
+                            <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+        <div class="row cl">
+            <div class="col-xs-3 col-sm-3 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" id="subbtn" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;"/>
+                <input class="btn radius" id="reset" type="reset" value="&nbsp;&nbsp;重置&nbsp;&nbsp;"/>
+            </div>
+        </div>
+    </form>
+</article>
+<!--_footer 作为公共模版分离出去-->
+<div th:replace="_footer :: footerjs"></div>
+<div th:replace="_ueditor :: ueditor"></div>
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+    $(function () {
+        $("#form-tBlogger-edit").validate({
+            rules: {
+        bloggername:
+        {
+            required: true,
+        },
+        uid:
+        {
+            required: true,
+        },
+        containerid:
+        {
+            required: true,
+        },
+        createtime:
+        {
+            required: true,
+        },
+        // wordmax:
+        // {
+        //     required: true,
+        // },
+        // wordmin:
+        // {
+        //     required: true,
+        // },
+        timestart:
+        {
+            required: true,
+        },
+        timeend:
+        {
+            required: true,
+        },
+        username:
+        {
+            required: true,
+        },
+        commitchioce:
+        {
+            required: true,
+        },
+        // pointersum:
+        // {
+        //     required: true,
+        // },
+    },
+        onkeyup:false,
+            debug
+    :
+        true,
+            success
+    :
+        "valid",
+            submitHandler
+    :
+
+        function (form) {
+            $(form).ajaxSubmit({
+                type: 'POST',
+                url: "/admin/tBlogger/edit",
+                success: function (data) {
+                    if (data.code == "0") {
+                        layer.designMsg('编辑成功!', 1, function () {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.location.reload();
+                            parent.layer.close(index);
+                        });
+                    } else {
+                        layer.designMsg('编辑失败!');
+                    }
+                },
+                error: function () {
+                    layer.designMsg('编辑异常!', 5);
+                }
+            });
+        }
+    })
+        ;
+    });
+
+    lay('.timeSpace').each(function(){
+        laydate.render({
+            elem: this
+            ,trigger: 'click'
+            ,type: 'datetime'
+        });
+    });
+    function  typechoice() {
+        if($("#wordsinge").is(':checked')==true){
+            $('#judge').val("0");
+            var box=document.getElementById("wordsingephoto");
+            box.checked=false;
+        }
+        else{
+            $('#judge').val("0");
+        }
+    }
+    function  typechoiceno() {
+        if($("#wordsingephoto").is(':checked')==true){
+            $('#judge').val("1");
+            var box2=document.getElementById("wordsinge");
+            box2.checked=false;
+        }
+        else{
+            $('#judge').val("0");
+        }
+    }
+    /**
+     * 评论
+     */
+    function  commit() {
+        if($("#commityes").is(':checked')==true){
+            $('#commitchioce').val("1");
+            var box=document.getElementById("commitno");
+            box.checked=false;
+            $('#point').fadeIn(100);
+
+        }
+    }
+    function  commitnop() {
+        if($("#commitno").is(':checked')==true){
+            $('#commitchioce').val("0");
+            var box=document.getElementById("commityes");
+            box.checked=false;
+            $('#point').fadeOut(100);
+        }
+    }
+    function commitjuege(){
+        var data = $('#pointersum').val();
+        if (data == '' || data == undefined || data == null){
+            var box=document.getElementById("commitno");
+            box.checked=true;
+            if($("#commitno").is(':checked')==true){
+                var boxno=document.getElementById("commityes");
+                boxno.checked=false;
+            }
+            $('#point').css("display","none");
+        }
+        else{
+            var box=document.getElementById("commityes");
+            box.checked=true;
+            if($("#commityes").is(':checked')==true){
+                var boxno=document.getElementById("commitno");
+                boxno.checked=false;
+            }
+            $('#point').css("display","block");
+        }
+    }
+
+
+    $(function () {
+        /**
+         * 点赞数
+         * @type {*|jQuery|*|*|*}
+         */
+        // var data = $('#pointersum').val();
+        var data =  $('#commitchioce').val();
+        if (data == 0){
+            var box=document.getElementById("commitno");
+            box.checked=true;
+            if($("#commitno").is(':checked')==true){
+                var boxno=document.getElementById("commityes");
+                boxno.checked=false;
+            }
+            $('#point').css("display","none");
+            // $("#pointersum").attr("value","0");
+        }
+        else{
+            var box=document.getElementById("commityes");
+            box.checked=true;
+            if($("#commityes").is(':checked')==true){
+                var boxno=document.getElementById("commitno");
+                boxno.checked=false;
+            }
+            $('#point').css("display","block");
+        }
+
+        /**
+         * 文字和图片的
+         * @type {*|jQuery|*|*|*}
+         */
+        var judge = $('#judge').val();
+        if (judge == 0){
+            var box=document.getElementById("wordsinge");
+            box.checked=true;
+            if($("#wordsinge").is(':checked')==true){
+                var boxno=document.getElementById("wordsingephoto");
+                boxno.checked=false;
+            }
+        }
+        else{
+            var box=document.getElementById("wordsingephoto");
+            box.checked=true;
+            if($("#wordsingephoto").is(':checked')==true){
+                var boxno=document.getElementById("wordsinge");
+                boxno.checked=false;
+            }
+        }
+    })
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>
